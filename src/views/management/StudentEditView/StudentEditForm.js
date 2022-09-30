@@ -1,5 +1,4 @@
 import 'date-fns';
-//import { format } from 'date-fns';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import PropTypes from 'prop-types';
@@ -37,45 +36,6 @@ import QuillEditor from 'src/components/QuillEditor';
 import FilesDropzone from 'src/components/FilesDropzone';
 
 
-
-const categories = [
-
-    {
-        id: 'level-7-diploma-in-strategic-management-and-leadership',
-        name: 'Level 7 Diploma in Strategic Management and Leadership'
-    },
-    {
-        id: 'level-7-diploma-in-educational-management-and-leadership',
-        name: 'Level 7 Diploma in Educational Management and Leadership'
-    },
-    {
-        id: 'level-7-diploma-in-international-business-law',
-        name: 'Level 7 Diploma in International Business Law'
-    },
-    {
-        id: 'level-7-extended-diploma-in-accounting-finance',
-        name: 'Level 7 Diploma in Accounting and Finance'
-    },
-    {
-        id: 'level-7-diploma-in-computing',
-        name: 'Level 7 Diploma in Computing'
-    },
-    {
-        id: 'level-7-diploma-in-human-resource-management',
-        name: 'Level 7 Diploma in Human Resource Management'
-    },
-    {
-        id: 'level-4-5-diploma-in-business-management',
-        name: 'Level 4 & 5 Diploma in Business Management'
-    },
-    {
-        id: 'level-4-5-diploma-in-information-technology',
-        name: 'Level 4 & 5 Diploma in Information Technology'
-    },
-
-];
-
-
 const useStyles = makeStyles(() => ({
     root: {},
     editor: {
@@ -87,11 +47,6 @@ const useStyles = makeStyles(() => ({
 
 function StudentEditForm({ state, className, ...rest }) {
 
-
-
-    useEffect(() => {
-        console.log('nameeeeeeeeee' + JSON.stringify(state.id))
-    })
     const classes = useStyles();
     const history = useHistory();
     const { enqueueSnackbar } = useSnackbar();
@@ -103,14 +58,6 @@ function StudentEditForm({ state, className, ...rest }) {
     };
 
 
-
-
-    const [expireDate, setExpireDate] = React.useState(new Date());
-
-    const handleDateChangeExpire = (date) => {
-        setExpireDate(date);
-    };
-
     return (
         <Formik
             enableReinitialize
@@ -121,6 +68,7 @@ function StudentEditForm({ state, className, ...rest }) {
                 studentId: state.studentId,
                 studentEmail: state.email,
                 issuedDate: state.issuedDate,
+                expireDate: ''
                 // images: [],
                 // includesTaxes: false,
                 // isTaxable: false,                
@@ -135,6 +83,7 @@ function StudentEditForm({ state, className, ...rest }) {
                 studentId: Yup.string().max(255),
                 studentEmail: Yup.string().max(255),
                 issuedDate: Yup.date().nullable(),
+                expireDate: Yup.date().nullable(),
                 // images: Yup.array(),
                 // includesTaxes: Yup.bool().required(),
                 // isTaxable: Yup.bool().required(),    
@@ -150,7 +99,7 @@ function StudentEditForm({ state, className, ...rest }) {
                     // Do api call
                     fetch(`http://localhost:3000/api/update/${state.id}`, {  // Enter your IP address here
 
-                        method: 'PUT',
+                        method: 'PATCH',
                         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
                         body: JSON.stringify({
                             student: values.studentId,
@@ -159,11 +108,10 @@ function StudentEditForm({ state, className, ...rest }) {
                             description: values.description,
                             course: values.category,
                             issuedDate: values.issuedDate,
-                            // expireDate: "2022/08/13"
+                            expireDate: values.expireDate
                         }) // body data type must match "Content-Type" header   
 
                     })
-                    alert(state._id);
                     setStatus({ success: true });
                     setSubmitting(false);
                     enqueueSnackbar('Student Updated', {
@@ -407,8 +355,8 @@ function StudentEditForm({ state, className, ...rest }) {
                                             margin="normal"
                                             id="date-picker-inline"
                                             label="Expire date"
-                                            value={expireDate}
-                                            onChange={handleDateChangeExpire}
+                                            value={values.expireDate}
+                                            onChange={value => setFieldValue("expireDate", value)}
                                             fullWidth
                                             KeyboardButtonProps={{
                                                 'aria-label': 'change date',

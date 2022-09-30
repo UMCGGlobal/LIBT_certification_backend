@@ -34,6 +34,14 @@ import { values } from 'lodash';
 
 const categories = [
   {
+    id: 'no-id',
+    name: 'Select a course'
+  },
+  {
+    id: 'level-4-5-diploma-in-business-management',
+    name: 'Level 4 & 5 Diploma in Business Management'
+  },
+  {
     id: 'level-7-diploma-in-strategic-management-and-leadership',
     name: 'Level 7 Diploma in Strategic Management and Leadership'
   },
@@ -42,20 +50,12 @@ const categories = [
     name: 'Level 7 Diploma in Educational Management and Leadership'
   },
   {
-    id: 'level-7-diploma-in-international-business-law',
-    name: 'Level 7 Diploma in International Business Law'
-  },
-  {
-    id: 'level-7-extended-diploma-in-accounting-finance',
-    name: 'Level 7 Diploma in Accounting and Finance'
-  },
-  {
     id: 'level-7-diploma-in-computing',
     name: 'Level 7 Diploma in Computing'
   },
   {
-    id: 'level-7-diploma-in-human-resource-management',
-    name: 'Level 7 Diploma in Human Resource Management'
+    id: 'level-4-5-diploma-in-information-technology',
+    name: 'Level 4 & 5 Diploma in Information Technology'
   }
 ];
 
@@ -72,11 +72,6 @@ function StudentCreateForm({ className, ...rest }) {
   const classes = useStyles();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
-  const [expireDate, setExpireDate] = React.useState(new Date());
-
-  const handleDateChangeExpire = (date) => {
-    setExpireDate(date);
-  };
 
   return (
     <Formik
@@ -87,6 +82,7 @@ function StudentCreateForm({ className, ...rest }) {
         studentId: '',
         studentEmail: '',
         issuedDate: new Date(),
+        expireDate: ''
         // salePrice: '',
         // images: [],
         // includesTaxes: false,
@@ -99,6 +95,7 @@ function StudentCreateForm({ className, ...rest }) {
         name: Yup.string().max(255).required(),
         studentId: Yup.string().max(255),
         issuedDate: Yup.date().nullable(),
+        expireDate: Yup.date().nullable(),
         //studentEmail: Yup.string().max(255),
         // salePrice: Yup.number().min(0),
         // images: Yup.array(),
@@ -124,9 +121,18 @@ function StudentCreateForm({ className, ...rest }) {
               description: values.description,
               course: values.category,
               issuedDate: values.issuedDate,
-              expireDate: "2022/08/13"
+              expireDate: values.expireDate
             }) // body data type must match "Content-Type" header   
           })
+          console.log(JSON.stringify({
+            student: values.studentId,
+            name: values.name,
+            email: values.studentEmail,
+            description: values.description,
+            course: values.category,
+            issuedDate: values.issuedDate,
+            expireDate: values.expireDate
+          }))
           setStatus({ success: true });
           setSubmitting(false);
           enqueueSnackbar('Student Created', {
@@ -357,8 +363,8 @@ function StudentCreateForm({ className, ...rest }) {
                       margin="normal"
                       id="date-picker-inline"
                       label="Expire date"
-                      value={expireDate}
-                      onChange={handleDateChangeExpire}
+                      value={values.expireDate}
+                      onChange={value => setFieldValue("expireDate", value)}
                       fullWidth
                       KeyboardButtonProps={{
                         'aria-label': 'change date',

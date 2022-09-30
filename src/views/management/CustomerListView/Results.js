@@ -448,7 +448,7 @@ function Results({ className, customers, ...rest }) {
                           {moment(customer.issuedDate).format("MM/DD/YYYY")}
                         </TableCell>
                         <TableCell>
-                          {customer.expireDate ? customer.expireDate : 'Does not expire'}
+                          {customer.expireDate ? moment(customer.expireDate).format("MM/DD/YYYY") : 'Does not expire'}
                         </TableCell>
                         <TableCell align="right">
                           <IconButton
