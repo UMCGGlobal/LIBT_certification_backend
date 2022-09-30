@@ -1,5 +1,4 @@
 import 'date-fns';
-//import { format } from 'date-fns';
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import PropTypes from 'prop-types';
