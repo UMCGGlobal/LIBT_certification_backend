@@ -514,7 +514,7 @@ function Results({ className, customers, ...rest }) {
                                                                     course: customer.course,
                                                                     issuedDate: customer.issuedDate,
                                                                     expireDate: customer.expireDate,
-                                                                    isDelete: false
+                                                                    isDelete: false,
                                                                 }
                                                             )
                                                         })}
