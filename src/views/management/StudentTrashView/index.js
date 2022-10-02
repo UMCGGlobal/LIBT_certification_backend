@@ -30,7 +30,7 @@ function StudentTrashView() {
     const [customers, setCustomers] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:3000/api/getAll')
+        fetch('http://ec2-3-91-144-53.compute-1.amazonaws.com:3000/api/getAll')
             .then(res => res.json())
             .then(
                 (result) => {

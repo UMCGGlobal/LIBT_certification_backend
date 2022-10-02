@@ -247,7 +247,7 @@ function Results({ className, customers, ...rest }) {
     };
 
     const deleteStudent = (student) => {
-        fetch(`http://localhost:3000/api/delete/${student}`, { method: 'DELETE' })
+        fetch(`http://ec2-3-91-144-53.compute-1.amazonaws.com:3000/api/delete/${student}`, { method: 'DELETE' })
             .then(() => console.log('Delete successful'))
             .then(() => {
                 window.location.reload(false);
@@ -304,7 +304,7 @@ function Results({ className, customers, ...rest }) {
 
     const sendStudentBackToList = () => {
         try {
-            fetch(`http://localhost:3000/api/update/${deleteId}`, {  // Enter your IP address here
+            fetch(`http://ec2-3-91-144-53.compute-1.amazonaws.com:3000/api/update/${deleteId}`, {  // Enter your IP address here
 
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
