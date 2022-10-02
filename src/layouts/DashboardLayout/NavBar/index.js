@@ -77,6 +77,11 @@ const navConfig = [
             //href: '/app/management/students/1'
             href: '/app/management/students/create'
           },
+          {
+            title: 'Trash',
+            //href: '/app/management/students/1'
+            href: '/app/management/students/trash'
+          },
           // {
           //   title: 'Edit Customer',
           //   href: '/app/management/students/1/edit'

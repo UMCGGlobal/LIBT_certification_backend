@@ -8,6 +8,7 @@ import {
   Container,
   makeStyles
 } from '@material-ui/core';
+import { BASE_URL } from '../../../constants/baseUrl';
 import axios from 'src/utils/axios';
 import Page from 'src/components/Page';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
@@ -30,6 +31,7 @@ function CustomerListView() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [customers, setCustomers] = useState(null);
 
+
   // const getCustomers = useCallback(() => {
   //   axios
   //     .get('/api/management/customers')
@@ -47,7 +49,8 @@ function CustomerListView() {
 
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/getAll')
+    console.log(BASE_URL + 'urllllllllllllll')
+    fetch('http://ec2-3-91-144-53.compute-1.amazonaws.com:3000/api/getAll')
       .then(res => res.json())
       .then(
         (result) => {

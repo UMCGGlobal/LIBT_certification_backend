@@ -97,7 +97,7 @@ function StudentEditForm({ state, className, ...rest }) {
             }) => {
                 try {
                     // Do api call
-                    fetch(`http://localhost:3000/api/update/${state.id}`, {  // Enter your IP address here
+                    fetch(`http://ec2-3-91-144-53.compute-1.amazonaws.com:3000/api/update/${state.id}`, {  // Enter your IP address here
 
                         method: 'PATCH',
                         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
