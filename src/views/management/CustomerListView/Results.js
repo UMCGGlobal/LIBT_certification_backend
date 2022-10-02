@@ -41,6 +41,8 @@ import {
   Trash as TrashIcon
 } from 'react-feather';
 import getInitials from 'src/utils/getInitials';
+import { useHistory } from 'react-router';
+import { useSnackbar } from 'notistack';
 
 const tabs = [
   // {
@@ -251,6 +253,8 @@ function Results({ className, customers, ...rest }) {
 
   }
 
+
+
   // Usually query is done on backend with indexing solutions
   const filteredCustomers = applyFilters(customers, query, filters);
   const sortedCustomers = applySort(filteredCustomers, sort);
@@ -262,16 +266,53 @@ function Results({ className, customers, ...rest }) {
 
   const [open, setOpen] = React.useState(false);
   const [deleteId, setDeleteId] = React.useState('')
+  const [studentObject, setStudentObject] = React.useState({});
+  const [status, setStatus] = React.useState({});
+  const [errors, setErrors] = React.useState({});
+  const history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const handleClickOpen = (stuId) => {
+  const handleClickOpen = ({ stuId, studentId, name, email, description, course, issuedDate, expireDate, isDelete }) => {
     setOpen(true);
-    setDeleteId(stuId)
-    console.log('studentidddd' + stuId);
+    setDeleteId(stuId);
+    setStudentObject({
+      student: studentId,
+      name: name,
+      email: email,
+      description: description,
+      course: course,
+      issuedDate: issuedDate,
+      expireDate: expireDate,
+      isDelete: isDelete,
+    })
+    console.log('studenttt' + JSON.stringify(customers));
   };
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  const sendStudentTrash = () => {
+    try {
+      fetch(`http://localhost:3000/api/update/${deleteId}`, {  // Enter your IP address here
+
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+        body: JSON.stringify(studentObject) // body data type must match "Content-Type" header   
+
+      })
+      setStatus({ success: true });
+      enqueueSnackbar('Student added to the trash', {
+        variant: 'error'
+      });
+      window.location.reload(false);
+    }
+    catch (err) {
+      setErrors({ submit: err.message });
+      setStatus({ success: false });
+    }
+
+  }
 
   return (
     <>
@@ -404,6 +445,7 @@ function Results({ className, customers, ...rest }) {
                         hover
                         key={customer.id}
                         selected={isCustomerSelected}
+                        style={{ display: customer.isDelete === true ? 'none' : '' }}
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
@@ -476,7 +518,20 @@ function Results({ className, customers, ...rest }) {
                           <IconButton
                             // component={RouterLink}
                             // to="/app/management/students/1"
-                            onClick={(() => { handleClickOpen(customer._id) })}
+                            onClick={(() => {
+                              handleClickOpen(
+                                {
+                                  stuId: customer._id,
+                                  studentId: customer.student,
+                                  name: customer.name,
+                                  email: customer.email,
+                                  description: customer.description,
+                                  course: customer.course,
+                                  issuedDate: customer.issuedDate,
+                                  expireDate: customer.expireDate,
+                                  isDelete: true
+                                })
+                            })}
                           >
                             <SvgIcon fontSize="small">
                               <TrashIcon />
@@ -513,7 +568,7 @@ function Results({ className, customers, ...rest }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={(() => { deleteStudent(deleteId) })} color="primary">
+          <Button onClick={(() => { sendStudentTrash() })} color="primary">
             Yes
           </Button>
           <Button onClick={handleClose} color="primary" autoFocus>

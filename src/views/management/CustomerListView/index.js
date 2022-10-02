@@ -30,6 +30,7 @@ function CustomerListView() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [customers, setCustomers] = useState(null);
 
+
   // const getCustomers = useCallback(() => {
   //   axios
   //     .get('/api/management/customers')

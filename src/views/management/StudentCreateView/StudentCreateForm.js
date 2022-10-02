@@ -82,7 +82,8 @@ function StudentCreateForm({ className, ...rest }) {
         studentId: '',
         studentEmail: '',
         issuedDate: new Date(),
-        expireDate: ''
+        expireDate: '',
+        isDelete: false,
         // salePrice: '',
         // images: [],
         // includesTaxes: false,
@@ -96,6 +97,7 @@ function StudentCreateForm({ className, ...rest }) {
         studentId: Yup.string().max(255),
         issuedDate: Yup.date().nullable(),
         expireDate: Yup.date().nullable(),
+        isDelete: Yup.bool().required(),
         //studentEmail: Yup.string().max(255),
         // salePrice: Yup.number().min(0),
         // images: Yup.array(),
@@ -121,7 +123,8 @@ function StudentCreateForm({ className, ...rest }) {
               description: values.description,
               course: values.category,
               issuedDate: values.issuedDate,
-              expireDate: values.expireDate
+              expireDate: values.expireDate,
+              isDelete: values.isDelete,
             }) // body data type must match "Content-Type" header   
           })
           console.log(JSON.stringify({
@@ -131,7 +134,8 @@ function StudentCreateForm({ className, ...rest }) {
             description: values.description,
             course: values.category,
             issuedDate: values.issuedDate,
-            expireDate: values.expireDate
+            expireDate: values.expireDate,
+            isDelete: values.isDelete
           }))
           setStatus({ success: true });
           setSubmitting(false);

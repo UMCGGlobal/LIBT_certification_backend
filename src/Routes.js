@@ -98,6 +98,11 @@ const routesConfig = [
       },
       {
         exact: true,
+        path: '/app/management/students/trash',
+        component: lazy(() => import('src/views/management/StudentTrashView'))
+      },
+      {
+        exact: true,
         path: '/app/management/students/:customerId',
         component: lazy(() => import('src/views/management/CustomerDetailsView'))
       },
