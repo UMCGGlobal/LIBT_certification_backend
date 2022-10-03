@@ -102,6 +102,11 @@ function Routes() {
                   />
                   <Route
                     exact
+                    path="/app/management/certificate"
+                    component={lazy(() => import('src/views/management/IssueCertificateView'))}
+                  />
+                  <Route
+                    exact
                     path="/app/management/customers/:id"
                     component={lazy(() => import('src/views/management/CustomerDetailsView'))}
                   />

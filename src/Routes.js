@@ -103,6 +103,11 @@ const routesConfig = [
       },
       {
         exact: true,
+        path: '/app/management/certificate',
+        component: lazy(() => import('src/views/management/IssueCertificateView'))
+      },
+      {
+        exact: true,
         path: '/app/management/students/:customerId',
         component: lazy(() => import('src/views/management/CustomerDetailsView'))
       },

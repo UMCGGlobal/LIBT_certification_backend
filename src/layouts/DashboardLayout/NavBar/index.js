@@ -39,7 +39,8 @@ import {
   MessageCircle as MessageCircleIcon,
   PieChart as PieChartIcon,
   Share2 as ShareIcon,
-  Users as UsersIcon
+  Users as UsersIcon,
+  Award as AwardIcon
 } from 'react-feather';
 import Logo from 'src/components/Logo';
 import NavItem from './NavItem';
@@ -88,21 +89,21 @@ const navConfig = [
           // }
         ]
       },
-      // {
-      //   title: 'Products',
-      //   icon: ShoppingCartIcon,
-      //   href: '/app/management/products',
-      //   items: [
-      //     {
-      //       title: 'List Products',
-      //       href: '/app/management/products'
-      //     },
-      //     {
-      //       title: 'Create Product',
-      //       href: '/app/management/products/create'
-      //     }
-      //   ]
-      // },
+      {
+        title: 'Cerificate',
+        icon: AwardIcon,
+        href: '/app/management/certificate',
+        items: [
+          {
+            title: 'Issue Certificate',
+            href: '/app/management/certificate'
+          },
+          // {
+          //   title: 'Create Product',
+          //   href: '/app/management/products/create'
+          // }
+        ]
+      },
       // {
       //   title: 'Orders',
       //   icon: FolderIcon,
