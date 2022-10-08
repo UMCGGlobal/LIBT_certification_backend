@@ -108,6 +108,16 @@ const routesConfig = [
       },
       {
         exact: true,
+        path: '/app/management/qualifications/create',
+        component: lazy(() => import('src/views/management/QualificationCreateView'))
+      },
+      {
+        exact: true,
+        path: '/app/management/qualifications',
+        component: lazy(() => import('src/views/management/QualificationsListView'))
+      },
+      {
+        exact: true,
         path: '/app/management/students/:customerId',
         component: lazy(() => import('src/views/management/CustomerDetailsView'))
       },

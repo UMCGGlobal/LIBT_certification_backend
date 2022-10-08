@@ -40,7 +40,8 @@ import {
   PieChart as PieChartIcon,
   Share2 as ShareIcon,
   Users as UsersIcon,
-  Award as AwardIcon
+  Award as AwardIcon,
+  Book as BookIcon
 } from 'react-feather';
 import Logo from 'src/components/Logo';
 import NavItem from './NavItem';
@@ -102,6 +103,21 @@ const navConfig = [
           //   title: 'Create Product',
           //   href: '/app/management/products/create'
           // }
+        ]
+      },
+      {
+        title: 'Qualification',
+        icon: BookIcon,
+        href: '/app/management/qualifications',
+        items: [
+          {
+            title: 'Qualifications',
+            href: '/app/management/qualifications'
+          },
+          {
+            title: 'Add Qualification',
+            href: '/app/management/qualifications/create'
+          }
         ]
       },
       // {

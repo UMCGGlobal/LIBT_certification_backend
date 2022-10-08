@@ -87,7 +87,7 @@ function applyFilters(customers, query, filters) {
     let matches = true;
 
     if (query) {
-      const properties = ['email', 'name'];
+      const properties = ['category', 'name'];
       let containsQuery = false;
 
       properties.forEach((property) => {
@@ -222,16 +222,17 @@ function Results({ className, customers, ...rest }) {
 
   const handleSelectAllCustomers = (event) => {
     setSelectedCustomers(event.target.checked
-      ? customers.map((customer) => customer.student)
+      ? customers.map((customer) => customer._id)
       : []);
   };
 
-  const handleSelectOneCustomer = (event, customerId) => {
-    if (!selectedCustomers.includes(customerId)) {
-      setSelectedCustomers((prevSelected) => [...prevSelected, customerId]);
+  const handleSelectOneCustomer = (event, _id) => {
+    console.log(_id);
+    if (!selectedCustomers.includes(_id)) {
+      setSelectedCustomers((prevSelected) => [...prevSelected, _id]);
 
     } else {
-      setSelectedCustomers((prevSelected) => prevSelected.filter((id) => id !== customerId));
+      setSelectedCustomers((prevSelected) => prevSelected.filter((id) => id !== _id));
 
     }
   };
@@ -316,7 +317,7 @@ function Results({ className, customers, ...rest }) {
 
   return (
     <>
-      {customers.length === 0 ? <Alert severity="info">There are no students in the list. Please add a new student.</Alert>
+      {customers.length === 0 ? <Alert severity="info">There are no qualifications in the list. Please add a new qualification.</Alert>
         :
         <Card
           className={clsx(classes.root, className)}
@@ -420,17 +421,15 @@ function Results({ className, customers, ...rest }) {
                       />
                     </TableCell>
                     <TableCell>
-                      Name
+                      Qualification
                     </TableCell>
                     <TableCell>
-                      Course
+                      Level
                     </TableCell>
                     <TableCell>
-                      Issued Date
+                      Code/s
                     </TableCell>
-                    <TableCell>
-                      Expire Date
-                    </TableCell>
+
                     <TableCell align="right">
                       Actions
                     </TableCell>
@@ -438,7 +437,7 @@ function Results({ className, customers, ...rest }) {
                 </TableHead>
                 <TableBody>
                   {paginatedCustomers.map((customer) => {
-                    const isCustomerSelected = selectedCustomers.includes(customer.student);
+                    const isCustomerSelected = selectedCustomers.includes(customer._id);
 
                     return (
                       <TableRow
@@ -450,7 +449,7 @@ function Results({ className, customers, ...rest }) {
                         <TableCell padding="checkbox">
                           <Checkbox
                             checked={isCustomerSelected}
-                            onChange={(event) => handleSelectOneCustomer(event, customer.student)}
+                            onChange={(event) => handleSelectOneCustomer(event, customer._id)}
                             value={isCustomerSelected}
                           />
                         </TableCell>
@@ -472,42 +471,47 @@ function Results({ className, customers, ...rest }) {
                               to="/app/management/students/1"
                               variant="h6"
                             > */}
-                              {customer.name}
-                              {/* </Link> */}
+                              <span style={{ fontWeight: 'bold' }}>{customer.name}</span>
+
                               <Typography
                                 variant="body2"
                                 color="textSecondary"
                               >
-                                {customer.email}
+                                {customer.category}
                               </Typography>
                             </div>
                           </Box>
                         </TableCell>
                         <TableCell>
-                          {customer.course}
+                          {customer.qualificationLevel}
                         </TableCell>
                         <TableCell>
-                          {moment(customer.issuedDate).format("MM/DD/YYYY")}
+
+                          {customer.qualificationCode.map((code, index) => (
+                            <>
+                              <span>{code.code}</span>
+                              <span style={{ display: customer.qualificationCode.length - 1 == index && 'none', fontWeight: 'bold' }}>  |  </span>
+                            </>
+                          ))}
+
                         </TableCell>
-                        <TableCell>
-                          {customer.expireDate ? moment(customer.expireDate).format("MM/DD/YYYY") : 'Does not expire'}
-                        </TableCell>
+
                         <TableCell align="right">
                           <IconButton
                             component={RouterLink}
                             to={{
                               pathname: "/app/management/students/edit",
-                              state: {
-                                id: customer._id,
-                                name: customer.name,
-                                email: customer.email,
-                                description: customer.description,
-                                course: customer.course,
-                                studentId: customer.student,
-                                issuedDate: customer.issuedDate,
-                                expireDate: customer.expireDate
+                              // state: {
+                              //   id: customer._id,
+                              //   name: customer.name,
+                              //   email: customer.email,
+                              //   description: customer.description,
+                              //   course: customer.course,
+                              //   studentId: customer.student,
+                              //   issuedDate: customer.issuedDate,
+                              //   expireDate: customer.expireDate
 
-                              }
+                              // }
                             }}
                           // to={"/app/management/students/edit"}
                           >
