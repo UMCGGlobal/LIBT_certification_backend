@@ -273,18 +273,29 @@ function Results({ className, customers, ...rest }) {
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleClickOpen = ({ stuId, studentId, name, email, description, course, issuedDate, expireDate, isDelete }) => {
+  const handleClickOpen = ({ id, category, name, qualificationCode, description, l4modules, l5modules, l7modules, qualificationLevel, isDelete }) => {
     setOpen(true);
-    setDeleteId(stuId);
+    setDeleteId(id);
     setStudentObject({
-      student: studentId,
+      // student: studentId,
+      // name: name,
+      // email: email,
+      // description: description,
+      // course: course,
+      // issuedDate: issuedDate,
+      // expireDate: expireDate,
+      // isDelete: isDelete,
+
+
+      category: category,
       name: name,
-      email: email,
+      qualificationCode: qualificationCode,
       description: description,
-      course: course,
-      issuedDate: issuedDate,
-      expireDate: expireDate,
-      isDelete: isDelete,
+      l4modules: l4modules,
+      l5modules: l5modules,
+      l7modules: l7modules,
+      qualificationLevel: qualificationLevel,
+      isDelete: isDelete
     })
     console.log('studenttt' + JSON.stringify(customers));
   };
@@ -295,15 +306,15 @@ function Results({ className, customers, ...rest }) {
 
   const sendStudentTrash = () => {
     try {
-      fetch(`http://ec2-3-91-144-53.compute-1.amazonaws.com:3000/api/update/${deleteId}`, {  // Enter your IP address here
+      fetch(`http://localhost:3000/api/qualifications/update/${deleteId}`, {  // Enter your IP address here
 
-        method: 'PATCH',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
         body: JSON.stringify(studentObject) // body data type must match "Content-Type" header   
 
       })
       setStatus({ success: true });
-      enqueueSnackbar('Student added to the trash', {
+      enqueueSnackbar('Qualification moved to the trash', {
         variant: 'error'
       });
       window.location.reload(false);
@@ -360,7 +371,7 @@ function Results({ className, customers, ...rest }) {
                 )
               }}
               onChange={handleQueryChange}
-              placeholder="Search students"
+              placeholder="Search qualification"
               value={query}
               variant="outlined"
             />
@@ -500,18 +511,20 @@ function Results({ className, customers, ...rest }) {
                           <IconButton
                             component={RouterLink}
                             to={{
-                              pathname: "/app/management/students/edit",
-                              // state: {
-                              //   id: customer._id,
-                              //   name: customer.name,
-                              //   email: customer.email,
-                              //   description: customer.description,
-                              //   course: customer.course,
-                              //   studentId: customer.student,
-                              //   issuedDate: customer.issuedDate,
-                              //   expireDate: customer.expireDate
+                              pathname: "/app/management/qualifications/edit",
+                              state: {
+                                id: customer._id,
+                                category: customer.category,
+                                name: customer.name,
+                                qualificationCode: customer.qualificationCode,
+                                description: customer.description,
+                                l4modules: customer.l4modules,
+                                l5modules: customer.l5modules,
+                                l7modules: customer.l7modules,
+                                qualificationLevel: customer.qualificationLevel,
+                                isDelete: customer.isDelete,
 
-                              // }
+                              }
                             }}
                           // to={"/app/management/students/edit"}
                           >
@@ -525,14 +538,15 @@ function Results({ className, customers, ...rest }) {
                             onClick={(() => {
                               handleClickOpen(
                                 {
-                                  stuId: customer._id,
-                                  studentId: customer.student,
+                                  id: customer._id,
+                                  category: customer.category,
                                   name: customer.name,
-                                  email: customer.email,
+                                  qualificationCode: customer.qualificationCode,
                                   description: customer.description,
-                                  course: customer.course,
-                                  issuedDate: customer.issuedDate,
-                                  expireDate: customer.expireDate,
+                                  l4modules: customer.l4modules,
+                                  l5modules: customer.l5modules,
+                                  l7modules: customer.l7modules,
+                                  qualificationLevel: customer.qualificationLevel,
                                   isDelete: true
                                 })
                             })}
@@ -568,7 +582,7 @@ function Results({ className, customers, ...rest }) {
         <DialogTitle id="alert-dialog-title">{"Delete Student"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete this student?
+            Are you sure you want to move this item to the trash?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

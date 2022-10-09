@@ -134,7 +134,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-function StudentCreateForm({ className, ...rest }) {
+function QualificationEditForm({ state, className, ...rest }) {
   const classes = useStyles();
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
@@ -146,44 +146,20 @@ function StudentCreateForm({ className, ...rest }) {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const emptyCodeArray = () => {
-    console.log('ahjfh')
-  }
+
 
   return (
     <Formik
       initialValues={{
-        category: '',
-        description: '',
-        name: '',
-        qualificationCode: [
-          {
-            code: '',
-          }
-        ],
-        l4modules: [
-          {
-            name: '',
-            code: ''
-
-          },
-        ],
-        l5modules: [
-          {
-            name: '',
-            code: ''
-
-          },
-        ],
-        l7modules: [
-          {
-            name: '',
-            code: ''
-
-          },
-        ],
-        qualificationLevel: 'Level4/5',
-        isDelete: false,
+        category: state.category,
+        description: state.description,
+        name: state.name,
+        qualificationCode: state.qualificationCode,
+        l4modules: state.l4modules,
+        l5modules: state.l5modules,
+        l7modules: state.l7modules,
+        qualificationLevel: state.qualificationLevel,
+        isDelete: state.isDelete,
         // salePrice: '',
         // images: [],
         // includesTaxes: false,
@@ -214,18 +190,32 @@ function StudentCreateForm({ className, ...rest }) {
       }) => {
         try {
           // Do api call
-          fetch('http://localhost:3000/api/qualifications/post', {  // Enter your IP address here
+          var level7Modules = [];
+          var level4Modules = [];
+          var level5Modules = [];
+          if (values.qualificationLevel === 'Level4/5') {
+            level7Modules = [];
+            level4Modules = values.l4modules;
+            level5Modules = values.l5modules;
+          }
+          else {
+            level4Modules = [];
+            level5Modules = [];
+            level7Modules = values.l7modules;
+          }
 
-            method: 'POST',
+          fetch(`http://localhost:3000/api/qualifications/update/${state.id}`, {  // Enter your IP address here
+
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
             body: JSON.stringify({
               category: values.category,
               name: values.name,
               qualificationCode: values.qualificationCode,
               description: values.description,
-              l4modules: values.l4modules,
-              l5modules: values.l5modules,
-              l7modules: values.l7modules,
+              l4modules: level4Modules,
+              l5modules: level5Modules,
+              l7modules: level7Modules,
               qualificationLevel: values.qualificationLevel,
               isDelete: values.isDelete,
             }) // body data type must match "Content-Type" header   
@@ -240,10 +230,10 @@ function StudentCreateForm({ className, ...rest }) {
             l7modules: values.l7modules,
             qualificationLevel: values.qualificationLevel,
             isDelete: values.isDelete
-          }))
+          }) + 'dhsghkghkshgkghksghkg')
           setStatus({ success: true });
           setSubmitting(false);
-          enqueueSnackbar('Qualification Successfully Created', {
+          enqueueSnackbar('Qualification Successfully Updated', {
             variant: 'success'
           });
           history.push('/app/management/qualifications');
@@ -323,8 +313,9 @@ function StudentCreateForm({ className, ...rest }) {
               <Typography
                 variant="h4"
                 color="textPrimary"
+
               >
-                Add qualification modules
+                Update qualification modules
               </Typography>
               <Box mt={1}
                 mb={3} />
@@ -603,7 +594,6 @@ function StudentCreateForm({ className, ...rest }) {
                                     type="button"
                                     className={classes.removeButton}
                                     onClick={() => remove(index)}
-                                    style={{ display: values.qualificationCode.length == 1 && 'none' }}
                                   >
                                     X
                                   </button>
@@ -618,7 +608,7 @@ function StudentCreateForm({ className, ...rest }) {
                             style={{ display: values.qualificationCode.length == 2 && 'none' }}
                             onClick={() => push({ code: '', })}
                           >
-                            {`Add level ${values.qualificationCode.length + 4} code`}
+                            Add a code
                           </Button>
                         </div>
                       )}
@@ -723,8 +713,8 @@ function StudentCreateForm({ className, ...rest }) {
   );
 }
 
-StudentCreateForm.propTypes = {
+QualificationEditForm.propTypes = {
   className: PropTypes.string
 };
 
-export default StudentCreateForm;
+export default QualificationEditForm;

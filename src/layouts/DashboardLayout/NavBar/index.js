@@ -41,7 +41,8 @@ import {
   Share2 as ShareIcon,
   Users as UsersIcon,
   Award as AwardIcon,
-  Book as BookIcon
+  Book as BookIcon,
+  Trash as TrashIcon
 } from 'react-feather';
 import Logo from 'src/components/Logo';
 import NavItem from './NavItem';
@@ -79,11 +80,11 @@ const navConfig = [
             //href: '/app/management/students/1'
             href: '/app/management/students/create'
           },
-          {
-            title: 'Trash',
-            //href: '/app/management/students/1'
-            href: '/app/management/students/trash'
-          },
+          // {
+          //   title: 'Trash',
+          //   //href: '/app/management/students/1'
+          //   href: '/app/management/students/trash'
+          // },
           // {
           //   title: 'Edit Customer',
           //   href: '/app/management/students/1/edit'
@@ -119,6 +120,21 @@ const navConfig = [
             href: '/app/management/qualifications/create'
           }
         ]
+      },
+      {
+        title: 'Trash',
+        icon: TrashIcon,
+        href: '/app/management/trash',
+        // items: [
+        //   {
+        //     title: 'Trash',
+        //     href: '/app/management/qualifications'
+        //   },
+        //   {
+        //     title: 'Add Qualification',
+        //     href: '/app/management/qualifications/create'
+        //   }
+        // ]
       },
       // {
       //   title: 'Orders',

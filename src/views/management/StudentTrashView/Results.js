@@ -312,7 +312,7 @@ function Results({ className, customers, ...rest }) {
 
             })
             setStatus({ success: true });
-            enqueueSnackbar('Student Deleted', {
+            enqueueSnackbar('Student moved back to the list', {
                 variant: 'error'
             });
             window.location.reload(false);
@@ -580,7 +580,7 @@ function Results({ className, customers, ...rest }) {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"Delete Student"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{"Resore Student"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         Are you sure you want to delete permanatly this student?
