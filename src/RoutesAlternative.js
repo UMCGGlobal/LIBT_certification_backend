@@ -102,6 +102,26 @@ function Routes() {
                   />
                   <Route
                     exact
+                    path="/app/management/certificate"
+                    component={lazy(() => import('src/views/management/IssueCertificateView'))}
+                  />
+                  <Route
+                    exact
+                    path="/app/management/qualifications/create"
+                    component={lazy(() => import('src/views/management/QualificationCreateView'))}
+                  />
+                  <Route
+                    exact
+                    path="/app/management/qualifications"
+                    component={lazy(() => import('src/views/management/QualificationsListView'))}
+                  />
+                  <Route
+                    exact
+                    path="/app/management/trash"
+                    component={lazy(() => import('src/views/management/Trash'))}
+                  />
+                  <Route
+                    exact
                     path="/app/management/customers/:id"
                     component={lazy(() => import('src/views/management/CustomerDetailsView'))}
                   />

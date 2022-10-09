@@ -98,8 +98,33 @@ const routesConfig = [
       },
       {
         exact: true,
+        path: '/app/management/qualifications/edit',
+        component: lazy(() => import('src/views/management/QualificationEditView'))
+      },
+      {
+        exact: true,
         path: '/app/management/students/trash',
         component: lazy(() => import('src/views/management/StudentTrashView'))
+      },
+      {
+        exact: true,
+        path: '/app/management/certificate',
+        component: lazy(() => import('src/views/management/IssueCertificateView'))
+      },
+      {
+        exact: true,
+        path: '/app/management/qualifications/create',
+        component: lazy(() => import('src/views/management/QualificationCreateView'))
+      },
+      {
+        exact: true,
+        path: '/app/management/qualifications',
+        component: lazy(() => import('src/views/management/QualificationsListView'))
+      },
+      {
+        exact: true,
+        path: '/app/management/trash',
+        component: lazy(() => import('src/views/management/Trash'))
       },
       {
         exact: true,

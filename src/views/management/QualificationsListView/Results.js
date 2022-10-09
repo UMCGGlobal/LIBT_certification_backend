@@ -87,7 +87,7 @@ function applyFilters(customers, query, filters) {
     let matches = true;
 
     if (query) {
-      const properties = ['email', 'name'];
+      const properties = ['category', 'name'];
       let containsQuery = false;
 
       properties.forEach((property) => {
@@ -222,16 +222,17 @@ function Results({ className, customers, ...rest }) {
 
   const handleSelectAllCustomers = (event) => {
     setSelectedCustomers(event.target.checked
-      ? customers.map((customer) => customer.student)
+      ? customers.map((customer) => customer._id)
       : []);
   };
 
-  const handleSelectOneCustomer = (event, customerId) => {
-    if (!selectedCustomers.includes(customerId)) {
-      setSelectedCustomers((prevSelected) => [...prevSelected, customerId]);
+  const handleSelectOneCustomer = (event, _id) => {
+    console.log(_id);
+    if (!selectedCustomers.includes(_id)) {
+      setSelectedCustomers((prevSelected) => [...prevSelected, _id]);
 
     } else {
-      setSelectedCustomers((prevSelected) => prevSelected.filter((id) => id !== customerId));
+      setSelectedCustomers((prevSelected) => prevSelected.filter((id) => id !== _id));
 
     }
   };
@@ -272,18 +273,29 @@ function Results({ className, customers, ...rest }) {
   const history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleClickOpen = ({ stuId, studentId, name, email, description, course, issuedDate, expireDate, isDelete }) => {
+  const handleClickOpen = ({ id, category, name, qualificationCode, description, l4modules, l5modules, l7modules, qualificationLevel, isDelete }) => {
     setOpen(true);
-    setDeleteId(stuId);
+    setDeleteId(id);
     setStudentObject({
-      student: studentId,
+      // student: studentId,
+      // name: name,
+      // email: email,
+      // description: description,
+      // course: course,
+      // issuedDate: issuedDate,
+      // expireDate: expireDate,
+      // isDelete: isDelete,
+
+
+      category: category,
       name: name,
-      email: email,
+      qualificationCode: qualificationCode,
       description: description,
-      course: course,
-      issuedDate: issuedDate,
-      expireDate: expireDate,
-      isDelete: isDelete,
+      l4modules: l4modules,
+      l5modules: l5modules,
+      l7modules: l7modules,
+      qualificationLevel: qualificationLevel,
+      isDelete: isDelete
     })
     console.log('studenttt' + JSON.stringify(customers));
   };
@@ -294,15 +306,15 @@ function Results({ className, customers, ...rest }) {
 
   const sendStudentTrash = () => {
     try {
-      fetch(`http://ec2-3-91-144-53.compute-1.amazonaws.com:3000/api/update/${deleteId}`, {  // Enter your IP address here
+      fetch(`http://localhost:3000/api/qualifications/update/${deleteId}`, {  // Enter your IP address here
 
-        method: 'PATCH',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
         body: JSON.stringify(studentObject) // body data type must match "Content-Type" header   
 
       })
       setStatus({ success: true });
-      enqueueSnackbar('Student moved to the trash', {
+      enqueueSnackbar('Qualification moved to the trash', {
         variant: 'error'
       });
       window.location.reload(false);
@@ -316,7 +328,7 @@ function Results({ className, customers, ...rest }) {
 
   return (
     <>
-      {customers.length === 0 ? <Alert severity="info">There are no students in the list. Please add a new student.</Alert>
+      {customers.length === 0 ? <Alert severity="info">There are no qualifications in the list. Please add a new qualification.</Alert>
         :
         <Card
           className={clsx(classes.root, className)}
@@ -359,7 +371,7 @@ function Results({ className, customers, ...rest }) {
                 )
               }}
               onChange={handleQueryChange}
-              placeholder="Search students"
+              placeholder="Search qualification"
               value={query}
               variant="outlined"
             />
@@ -420,17 +432,15 @@ function Results({ className, customers, ...rest }) {
                       />
                     </TableCell>
                     <TableCell>
-                      Name
+                      Qualification
                     </TableCell>
                     <TableCell>
-                      Course
+                      Level
                     </TableCell>
                     <TableCell>
-                      Issued Date
+                      Code/s
                     </TableCell>
-                    <TableCell>
-                      Expire Date
-                    </TableCell>
+
                     <TableCell align="right">
                       Actions
                     </TableCell>
@@ -438,7 +448,7 @@ function Results({ className, customers, ...rest }) {
                 </TableHead>
                 <TableBody>
                   {paginatedCustomers.map((customer) => {
-                    const isCustomerSelected = selectedCustomers.includes(customer.student);
+                    const isCustomerSelected = selectedCustomers.includes(customer._id);
 
                     return (
                       <TableRow
@@ -450,7 +460,7 @@ function Results({ className, customers, ...rest }) {
                         <TableCell padding="checkbox">
                           <Checkbox
                             checked={isCustomerSelected}
-                            onChange={(event) => handleSelectOneCustomer(event, customer.student)}
+                            onChange={(event) => handleSelectOneCustomer(event, customer._id)}
                             value={isCustomerSelected}
                           />
                         </TableCell>
@@ -472,40 +482,47 @@ function Results({ className, customers, ...rest }) {
                               to="/app/management/students/1"
                               variant="h6"
                             > */}
-                              {customer.name}
-                              {/* </Link> */}
+                              <span style={{ fontWeight: 'bold' }}>{customer.name}</span>
+
                               <Typography
                                 variant="body2"
                                 color="textSecondary"
                               >
-                                {customer.email}
+                                {customer.category}
                               </Typography>
                             </div>
                           </Box>
                         </TableCell>
                         <TableCell>
-                          {customer.course}
+                          {customer.qualificationLevel}
                         </TableCell>
                         <TableCell>
-                          {moment(customer.issuedDate).format("MM/DD/YYYY")}
+
+                          {customer.qualificationCode.map((code, index) => (
+                            <>
+                              <span>{code.code}</span>
+                              <span style={{ display: customer.qualificationCode.length - 1 == index && 'none', fontWeight: 'bold' }}>  |  </span>
+                            </>
+                          ))}
+
                         </TableCell>
-                        <TableCell>
-                          {customer.expireDate ? moment(customer.expireDate).format("MM/DD/YYYY") : 'Does not expire'}
-                        </TableCell>
+
                         <TableCell align="right">
                           <IconButton
                             component={RouterLink}
                             to={{
-                              pathname: "/app/management/students/edit",
+                              pathname: "/app/management/qualifications/edit",
                               state: {
                                 id: customer._id,
+                                category: customer.category,
                                 name: customer.name,
-                                email: customer.email,
+                                qualificationCode: customer.qualificationCode,
                                 description: customer.description,
-                                course: customer.course,
-                                studentId: customer.student,
-                                issuedDate: customer.issuedDate,
-                                expireDate: customer.expireDate
+                                l4modules: customer.l4modules,
+                                l5modules: customer.l5modules,
+                                l7modules: customer.l7modules,
+                                qualificationLevel: customer.qualificationLevel,
+                                isDelete: customer.isDelete,
 
                               }
                             }}
@@ -521,14 +538,15 @@ function Results({ className, customers, ...rest }) {
                             onClick={(() => {
                               handleClickOpen(
                                 {
-                                  stuId: customer._id,
-                                  studentId: customer.student,
+                                  id: customer._id,
+                                  category: customer.category,
                                   name: customer.name,
-                                  email: customer.email,
+                                  qualificationCode: customer.qualificationCode,
                                   description: customer.description,
-                                  course: customer.course,
-                                  issuedDate: customer.issuedDate,
-                                  expireDate: customer.expireDate,
+                                  l4modules: customer.l4modules,
+                                  l5modules: customer.l5modules,
+                                  l7modules: customer.l7modules,
+                                  qualificationLevel: customer.qualificationLevel,
                                   isDelete: true
                                 })
                             })}
@@ -564,7 +582,7 @@ function Results({ className, customers, ...rest }) {
         <DialogTitle id="alert-dialog-title">{"Delete Student"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete this student?
+            Are you sure you want to move this item to the trash?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

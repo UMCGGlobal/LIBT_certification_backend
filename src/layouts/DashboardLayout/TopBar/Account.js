@@ -68,16 +68,17 @@ function Account() {
         ref={ref}
       >
         <Avatar
-          alt="User"
+          alt="LIBT"
           className={classes.avatar}
-          src={account.user.avatar}
+        //src={account.user.avatar}
         />
         <Hidden smDown>
           <Typography
             variant="h6"
             color="inherit"
           >
-            {`${account.user.firstName} ${account.user.lastName}`}
+            {/* {`${account.user.firstName} ${account.user.lastName}`} */}
+            LIBT
           </Typography>
         </Hidden>
       </Box>
@@ -93,7 +94,7 @@ function Account() {
         anchorEl={ref.current}
         open={isOpen}
       >
-        <MenuItem
+        {/* <MenuItem
           component={RouterLink}
           to="/app/social/profile"
         >
@@ -104,7 +105,7 @@ function Account() {
           to="/app/account"
         >
           Account
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem onClick={handleLogout}>
           Logout
         </MenuItem>
