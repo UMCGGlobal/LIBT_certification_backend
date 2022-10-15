@@ -31,6 +31,7 @@ import {
 import QuillEditor from 'src/components/QuillEditor';
 import FilesDropzone from 'src/components/FilesDropzone';
 import { values } from 'lodash';
+import { BASE_URL } from '../../../constants/baseUrl';
 
 const categories = [
   {
@@ -110,24 +111,11 @@ function StudentCreateForm({ className, ...rest }) {
         setStatus,
         setSubmitting
       }) => {
-        try {
-          // Do api call
-          fetch('http://ec2-3-91-144-53.compute-1.amazonaws.com:3000/api/post', {  // Enter your IP address here
-
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-            body: JSON.stringify({
-              student: values.studentId,
-              name: values.name,
-              email: values.studentEmail,
-              description: values.description,
-              course: values.category,
-              issuedDate: values.issuedDate,
-              expireDate: values.expireDate,
-              isDelete: values.isDelete,
-            }) // body data type must match "Content-Type" header   
-          })
-          console.log(JSON.stringify({
+        // Do api call
+        fetch(`${BASE_URL}:3000/api/post`, {  // Enter your IP address here
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+          body: JSON.stringify({
             student: values.studentId,
             name: values.name,
             email: values.studentEmail,
@@ -135,19 +123,20 @@ function StudentCreateForm({ className, ...rest }) {
             course: values.category,
             issuedDate: values.issuedDate,
             expireDate: values.expireDate,
-            isDelete: values.isDelete
-          }))
+            isDelete: values.isDelete,
+          }) // body data type must match "Content-Type" header   
+        }).then(() => {
           setStatus({ success: true });
           setSubmitting(false);
           enqueueSnackbar('Student Created', {
             variant: 'success'
           });
           history.push('/app/management/students');
-        } catch (err) {
+        }).catch((err) => {
           setErrors({ submit: err.message });
           setStatus({ success: false });
           setSubmitting(false);
-        }
+        })
       }}
     >
       {({

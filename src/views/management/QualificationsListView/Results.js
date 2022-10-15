@@ -277,16 +277,6 @@ function Results({ className, customers, ...rest }) {
     setOpen(true);
     setDeleteId(id);
     setStudentObject({
-      // student: studentId,
-      // name: name,
-      // email: email,
-      // description: description,
-      // course: course,
-      // issuedDate: issuedDate,
-      // expireDate: expireDate,
-      // isDelete: isDelete,
-
-
       category: category,
       name: name,
       qualificationCode: qualificationCode,

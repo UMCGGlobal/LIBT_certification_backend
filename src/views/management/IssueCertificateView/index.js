@@ -3,6 +3,7 @@ import { Container, makeStyles } from '@material-ui/core';
 import Page from 'src/components/Page';
 import Header from './Header';
 import IssueCertificateForm from './IssueCertificateForm';
+import { BASE_URL } from '../../../constants/baseUrl';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -19,16 +20,17 @@ function IssueCertificateView() {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [customers, setCustomers] = useState(null);
-
-  useEffect(() => {
-
-    fetch('http://ec2-3-91-144-53.compute-1.amazonaws.com:3000/api/getAll')
+  const [qualifications, setQualifications] = useState(null);
+  const getStudents = () => {
+    fetch(`${BASE_URL}:3000/api/getAll`)
       .then(res => res.json())
       .then(
         (result) => {
           setIsLoaded(true);
           setCustomers(result);
+
         },
+
         // Note: it's important to handle errors here
         // instead of a catch() block so that we don't swallow
         // exceptions from actual bugs in components.
@@ -37,10 +39,40 @@ function IssueCertificateView() {
           setError(error);
         }
 
-      )
+      );
+
+  }
+  console.log(qualifications + 'ashfkahfakhfkahfk');
+  const getQualifications = () => {
+    fetch(`${BASE_URL}:3000/api/qualifications/getAll`)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          setIsLoaded(true);
+          setQualifications(result);
+
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          setIsLoaded(true);
+          setError(error);
+        })
+  }
+
+  useEffect(() => {
+    getStudents();
+    getQualifications();
+
   }, [])
 
   if (!customers) {
+    return null;
+  };
+
+
+  if (!qualifications) {
     return null;
   }
 
@@ -51,7 +83,7 @@ function IssueCertificateView() {
     >
       <Container maxWidth="lg">
         <Header />
-        <IssueCertificateForm customers={customers} />
+        <IssueCertificateForm customers={customers} qualifications={qualifications} />
       </Container>
     </Page>
   );

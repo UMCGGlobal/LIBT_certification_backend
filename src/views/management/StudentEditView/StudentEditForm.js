@@ -34,6 +34,7 @@ import {
 } from '@material-ui/pickers';
 import QuillEditor from 'src/components/QuillEditor';
 import FilesDropzone from 'src/components/FilesDropzone';
+import { BASE_URL } from '../../../constants/baseUrl';
 
 
 const useStyles = makeStyles(() => ({
@@ -95,34 +96,36 @@ function StudentEditForm({ state, className, ...rest }) {
                 setStatus,
                 setSubmitting
             }) => {
-                try {
-                    // Do api call
-                    fetch(`http://ec2-3-91-144-53.compute-1.amazonaws.com:3000/api/update/${state.id}`, {  // Enter your IP address here
 
-                        method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-                        body: JSON.stringify({
-                            student: values.studentId,
-                            name: values.name,
-                            email: values.studentEmail,
-                            description: values.description,
-                            course: values.category,
-                            issuedDate: values.issuedDate,
-                            expireDate: values.expireDate
-                        }) // body data type must match "Content-Type" header   
+                // Do api call
+                fetch(`${BASE_URL}:3000/api/update/${state.id}`, {  // Enter your IP address here
 
-                    })
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+                    body: JSON.stringify({
+                        student: values.studentId,
+                        name: values.name,
+                        email: values.studentEmail,
+                        description: values.description,
+                        course: values.category,
+                        issuedDate: values.issuedDate,
+                        expireDate: values.expireDate
+                    }) // body data type must match "Content-Type" header   
+
+                }).then(() => {
                     setStatus({ success: true });
                     setSubmitting(false);
                     enqueueSnackbar('Student Updated', {
                         variant: 'success'
                     });
                     history.push('/app/management/students');
-                } catch (err) {
+                }).catch((err) => {
+
                     setErrors({ submit: err.message });
                     setStatus({ success: false });
                     setSubmitting(false);
-                }
+
+                })
             }}
         >
             {({

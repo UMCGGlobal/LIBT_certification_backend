@@ -31,26 +31,9 @@ function QualificationsListView() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [customers, setCustomers] = useState(null);
 
-
-  // const getCustomers = useCallback(() => {
-  //   axios
-  //     .get('/api/management/customers')
-  //     .then((response) => {
-  //       if (isMountedRef.current) {
-  //         setCustomers(response.data.customers);
-  //         console.log('dataaaaaaaaaaaaaa' + JSON.stringify(response.data));
-  //       }
-  //     });
-  // }, [isMountedRef]);
-
-  // useEffect(() => {
-  //   getCustomers();
-  // }, [getCustomers]);
-
-
   useEffect(() => {
 
-    fetch('http://localhost:3000/api/qualifications/getAll')
+    fetch(`${BASE_URL}:3000/api/qualifications/getAll`)
       .then(res => res.json())
       .then(
         (result) => {

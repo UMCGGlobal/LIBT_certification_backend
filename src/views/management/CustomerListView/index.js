@@ -49,11 +49,11 @@ function CustomerListView() {
 
 
   useEffect(() => {
-    console.log(BASE_URL + 'urllllllllllllll')
-    fetch('http://ec2-3-91-144-53.compute-1.amazonaws.com:3000/api/getAll')
+    fetch(`${BASE_URL}:3000/api/getAll`)
       .then(res => res.json())
       .then(
         (result) => {
+          console.log('newwww console');
           setIsLoaded(true);
           setCustomers(result);
         },
@@ -61,6 +61,7 @@ function CustomerListView() {
         // instead of a catch() block so that we don't swallow
         // exceptions from actual bugs in components.
         (error) => {
+          console.log('newwww console errorrrrr');
           setIsLoaded(true);
           setError(error);
         }

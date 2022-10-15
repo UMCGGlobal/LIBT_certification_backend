@@ -44,6 +44,7 @@ import {
     RotateCcw as RotateCcwIcon
 } from 'react-feather';
 import getInitials from 'src/utils/getInitials';
+import { BASE_URL } from '../../../constants/baseUrl';
 
 
 const tabs = [
@@ -247,7 +248,7 @@ function Results({ className, customers, ...rest }) {
     };
 
     const deleteStudent = (student) => {
-        fetch(`http://ec2-3-91-144-53.compute-1.amazonaws.com:3000/api/delete/${student}`, { method: 'DELETE' })
+        fetch(`${BASE_URL}:3000/api/delete/${student}`, { method: 'DELETE' })
             .then(() => console.log('Delete successful'))
             .then(() => {
                 window.location.reload(false);
@@ -303,24 +304,23 @@ function Results({ className, customers, ...rest }) {
     };
 
     const sendStudentBackToList = () => {
-        try {
-            fetch(`http://ec2-3-91-144-53.compute-1.amazonaws.com:3000/api/update/${deleteId}`, {  // Enter your IP address here
 
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-                body: JSON.stringify(studentObject) // body data type must match "Content-Type" header   
+        fetch(`${BASE_URL}:3000/api/update/${deleteId}`, {  // Enter your IP address here
 
-            })
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+            body: JSON.stringify(studentObject) // body data type must match "Content-Type" header   
+
+        }).then(() => {
             setStatus({ success: true });
             enqueueSnackbar('Student moved back to the list', {
                 variant: 'error'
             });
             window.location.reload(false);
-        }
-        catch (err) {
+        }).catch((err) => {
             setErrors({ submit: err.message });
             setStatus({ success: false });
-        }
+        })
 
     }
     return (

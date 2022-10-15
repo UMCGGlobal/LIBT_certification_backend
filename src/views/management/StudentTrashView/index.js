@@ -12,6 +12,7 @@ import Page from 'src/components/Page';
 import useIsMountedRef from 'src/hooks/useIsMountedRef';
 import Header from './Header';
 import Results from './Results';
+import { BASE_URL } from '../../../constants/baseUrl';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -31,7 +32,7 @@ function StudentTrashView() {
     const [customers, setCustomers] = useState(null);
 
     useEffect(() => {
-        fetch('http://ec2-3-91-144-53.compute-1.amazonaws.com:3000/api/getAll')
+        fetch(`${BASE_URL}:3000/api/getAll`)
             .then(res => res.json())
             .then(
                 (result) => {

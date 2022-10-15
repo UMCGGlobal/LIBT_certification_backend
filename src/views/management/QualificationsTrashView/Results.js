@@ -44,6 +44,7 @@ import {
 import getInitials from 'src/utils/getInitials';
 import { useHistory } from 'react-router';
 import { useSnackbar } from 'notistack';
+import { BASE_URL } from '../../../constants/baseUrl';
 
 const tabs = [
   // {
@@ -247,7 +248,7 @@ function Results({ className, customers, ...rest }) {
   };
 
   const deleteStudent = (id) => {
-    fetch(`http://localhost:3000/api/qualifications/delete/${id}`, { method: 'DELETE' })
+    fetch(`${BASE_URL}:3000/api/qualifications/delete/${id}`, { method: 'DELETE' })
       .then(() => console.log('Delete successful'))
       .then(() => {
         window.location.reload(false);
@@ -295,7 +296,7 @@ function Results({ className, customers, ...rest }) {
   const handleClickOpenDelete = (id) => {
     setOpenDelete(true);
     setDeleteId(id);
-    alert(id)
+
   };
 
   const handleClose = () => {
@@ -309,25 +310,23 @@ function Results({ className, customers, ...rest }) {
 
 
   const sendStudentBackToList = () => {
-    try {
-      fetch(`http://localhost:3000/api/qualifications/update/${deleteId}`, {  // Enter your IP address here
 
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-        body: JSON.stringify(studentObject) // body data type must match "Content-Type" header   
+    fetch(`${BASE_URL}:3000/api/qualifications/update/${deleteId}`, {  // Enter your IP address here
 
-      })
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+      body: JSON.stringify(studentObject) // body data type must match "Content-Type" header   
+
+    }).then(() => {
       setStatus({ success: true });
       enqueueSnackbar('Qualification moved back to the list', {
         variant: 'error'
       });
       window.location.reload(false);
-    }
-    catch (err) {
+    }).catch((err) => {
       setErrors({ submit: err.message });
       setStatus({ success: false });
-    }
-
+    })
   }
 
   return (

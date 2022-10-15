@@ -39,6 +39,7 @@ import { values } from 'lodash';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormLabel from '@material-ui/core/FormLabel';
+import { BASE_URL } from '../../../constants/baseUrl';
 
 const categories = [
   {
@@ -212,25 +213,12 @@ function StudentCreateForm({ className, ...rest }) {
         setStatus,
         setSubmitting
       }) => {
-        try {
-          // Do api call
-          fetch('http://localhost:3000/api/qualifications/post', {  // Enter your IP address here
 
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-            body: JSON.stringify({
-              category: values.category,
-              name: values.name,
-              qualificationCode: values.qualificationCode,
-              description: values.description,
-              l4modules: values.l4modules,
-              l5modules: values.l5modules,
-              l7modules: values.l7modules,
-              qualificationLevel: values.qualificationLevel,
-              isDelete: values.isDelete,
-            }) // body data type must match "Content-Type" header   
-          })
-          console.log(JSON.stringify({
+        // Do api call
+        fetch(`${BASE_URL}:3000/api/qualifications/post`, {  // Enter your IP address here
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+          body: JSON.stringify({
             category: values.category,
             name: values.name,
             qualificationCode: values.qualificationCode,
@@ -239,19 +227,31 @@ function StudentCreateForm({ className, ...rest }) {
             l5modules: values.l5modules,
             l7modules: values.l7modules,
             qualificationLevel: values.qualificationLevel,
-            isDelete: values.isDelete
-          }))
+            isDelete: values.isDelete,
+          }) // body data type must match "Content-Type" header   
+        }).then(() => {
           setStatus({ success: true });
           setSubmitting(false);
           enqueueSnackbar('Qualification Successfully Created', {
             variant: 'success'
           });
           history.push('/app/management/qualifications');
-        } catch (err) {
+        }).catch((err) => {
           setErrors({ submit: err.message });
           setStatus({ success: false });
           setSubmitting(false);
-        }
+        })
+        // console.log(JSON.stringify({
+        //   category: values.category,
+        //   name: values.name,
+        //   qualificationCode: values.qualificationCode,
+        //   description: values.description,
+        //   l4modules: values.l4modules,
+        //   l5modules: values.l5modules,
+        //   l7modules: values.l7modules,
+        //   qualificationLevel: values.qualificationLevel,
+        //   isDelete: values.isDelete
+        // }))
       }}
     >
       {({

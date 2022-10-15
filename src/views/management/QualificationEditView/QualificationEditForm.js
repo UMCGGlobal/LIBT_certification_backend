@@ -39,6 +39,7 @@ import { values } from 'lodash';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormLabel from '@material-ui/core/FormLabel';
+import { BASE_URL } from '../../../constants/baseUrl';
 
 const categories = [
   {
@@ -188,60 +189,49 @@ function QualificationEditForm({ state, className, ...rest }) {
         setStatus,
         setSubmitting
       }) => {
-        try {
-          // Do api call
-          var level7Modules = [];
-          var level4Modules = [];
-          var level5Modules = [];
-          if (values.qualificationLevel === 'Level4/5') {
-            level7Modules = [];
-            level4Modules = values.l4modules;
-            level5Modules = values.l5modules;
-          }
-          else {
-            level4Modules = [];
-            level5Modules = [];
-            level7Modules = values.l7modules;
-          }
 
-          fetch(`http://localhost:3000/api/qualifications/update/${state.id}`, {  // Enter your IP address here
+        // Do api call
+        var level7Modules = [];
+        var level4Modules = [];
+        var level5Modules = [];
+        if (values.qualificationLevel === 'Level4/5') {
+          level7Modules = [];
+          level4Modules = values.l4modules;
+          level5Modules = values.l5modules;
+        }
+        else {
+          level4Modules = [];
+          level5Modules = [];
+          level7Modules = values.l7modules;
+        }
 
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-            body: JSON.stringify({
-              category: values.category,
-              name: values.name,
-              qualificationCode: values.qualificationCode,
-              description: values.description,
-              l4modules: level4Modules,
-              l5modules: level5Modules,
-              l7modules: level7Modules,
-              qualificationLevel: values.qualificationLevel,
-              isDelete: values.isDelete,
-            }) // body data type must match "Content-Type" header   
-          })
-          console.log(JSON.stringify({
+        fetch(`${BASE_URL}:3000/api/qualifications/update/${state.id}`, {  // Enter your IP address here
+
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+          body: JSON.stringify({
             category: values.category,
             name: values.name,
             qualificationCode: values.qualificationCode,
             description: values.description,
-            l4modules: values.l4modules,
-            l5modules: values.l5modules,
-            l7modules: values.l7modules,
+            l4modules: level4Modules,
+            l5modules: level5Modules,
+            l7modules: level7Modules,
             qualificationLevel: values.qualificationLevel,
-            isDelete: values.isDelete
-          }) + 'dhsghkghkshgkghksghkg')
+            isDelete: values.isDelete,
+          }) // body data type must match "Content-Type" header   
+        }).then(() => {
           setStatus({ success: true });
           setSubmitting(false);
           enqueueSnackbar('Qualification Successfully Updated', {
             variant: 'success'
           });
           history.push('/app/management/qualifications');
-        } catch (err) {
+        }).catch((err) => {
           setErrors({ submit: err.message });
           setStatus({ success: false });
           setSubmitting(false);
-        }
+        })
       }}
     >
       {({
@@ -653,7 +643,7 @@ function QualificationEditForm({ state, className, ...rest }) {
                               style={{ display: values.qualificationCode.length == 1 && 'none' }}
                               onClick={() => push({ code: '', })}
                             >
-                              Add module code
+                              {`Add level ${values.qualificationCode.length + 4} code`}
                             </Button>
                           </div>
                         )}

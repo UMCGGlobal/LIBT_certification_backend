@@ -293,25 +293,23 @@ function Results({ className, customers, ...rest }) {
   };
 
   const sendStudentTrash = () => {
-    try {
-      fetch(`http://ec2-3-91-144-53.compute-1.amazonaws.com:3000/api/update/${deleteId}`, {  // Enter your IP address here
 
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-        body: JSON.stringify(studentObject) // body data type must match "Content-Type" header   
+    fetch(`http://ec2-3-91-144-53.compute-1.amazonaws.com:3000/api/update/${deleteId}`, {  // Enter your IP address here
 
-      })
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+      body: JSON.stringify(studentObject) // body data type must match "Content-Type" header   
+
+    }).then(() => {
       setStatus({ success: true });
       enqueueSnackbar('Student moved to the trash', {
         variant: 'error'
       });
       window.location.reload(false);
-    }
-    catch (err) {
+    }).catch((err) => {
       setErrors({ submit: err.message });
       setStatus({ success: false });
-    }
-
+    })
   }
 
   return (
