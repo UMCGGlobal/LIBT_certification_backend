@@ -215,6 +215,21 @@ function StudentCreateForm({ className, ...rest }) {
       }) => {
 
         // Do api call
+
+        var level7Modules = [];
+        var level4Modules = [];
+        var level5Modules = [];
+        if (values.qualificationLevel === 'Level4/5') {
+          level7Modules = [];
+          level4Modules = values.l4modules;
+          level5Modules = values.l5modules;
+        }
+        else {
+          level4Modules = [];
+          level5Modules = [];
+          level7Modules = values.l7modules;
+        }
+
         fetch(`${BASE_URL}:3000/api/qualifications/post`, {  // Enter your IP address here
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
@@ -223,9 +238,9 @@ function StudentCreateForm({ className, ...rest }) {
             name: values.name,
             qualificationCode: values.qualificationCode,
             description: values.description,
-            l4modules: values.l4modules,
-            l5modules: values.l5modules,
-            l7modules: values.l7modules,
+            l4modules: level4Modules,
+            l5modules: level5Modules,
+            l7modules: level7Modules,
             qualificationLevel: values.qualificationLevel,
             isDelete: values.isDelete,
           }) // body data type must match "Content-Type" header   

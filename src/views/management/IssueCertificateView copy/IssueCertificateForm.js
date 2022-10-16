@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 import PropTypes, { element } from 'prop-types';
 import clsx from 'clsx';
 import * as Yup from 'yup';
-import { Formik, Field } from 'formik';
+import { Formik } from 'formik';
 import { useSnackbar } from 'notistack';
 import { BASE_URL } from '../../../constants/baseUrl';
 import {
@@ -29,8 +29,7 @@ import {
 import {
   X as XIcon,
   Search as SearchIcon,
-  Droplet as DropletIcon,
-  Users
+  Droplet as DropletIcon
 } from 'react-feather';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -64,14 +63,6 @@ const useStyles = makeStyles(() => ({
       border: '1px solid rgba(0, 0, 0)',
     }
   },
-  textBoxGrade: {
-    padding: '5px',
-    border: '1px solid rgba(194, 194, 194)',
-    borderRadius: '5px',
-    '&:hover': {
-      border: '1px solid rgba(0, 0, 0)',
-    }
-  },
   studentList: {
     margin: '10px',
     '&:hover': {
@@ -101,7 +92,6 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-
 function IssueCertificateForm({ customers, qualifications, className, ...rest }) {
 
   useEffect(() => {
@@ -120,39 +110,37 @@ function IssueCertificateForm({ customers, qualifications, className, ...rest })
   const [studentNames, setStudentNames] = useState([]);
   const [studentNamesOpen, setStudentNamesOpen] = useState(false);
   const [qulificationNameOpen, setQulificationNameOpen] = useState(false);
-  const [moduleNameOpen, setModuleNameOpen] = useState(false);
   const [studentName, setStudentName] = useState('Select a student');
   const [studentId, setStudentId] = useState(null);
   const [studentEmail, setStudentEmail] = useState(null);
   const [searchName, setSearchName] = useState('');
-
-
   const [qualification, setQualification] = useState({
     name: 'Select a qualification',
     id: '',
-    qualificationLevel: '',
-    level4: [],
-    level5: [],
-    level7: []
+    level4: []
   });
+
+  const [level4Grades, setLevel4Grades] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
+
 
 
   return (
     <Formik
       initialValues={{
         studentName: studentName,
-        // category: '',
-        // moduleGrade: '',
+        category: '',
+        moduleGrade: '',
         studentId: studentId,
         studentEmail: studentEmail,
         issuedDate: new Date(),
         expireDate: '',
         isDelete: false,
-        l4modules: [],
-        l5modules: [],
-        l7modules: [],
-        certificateId: '',
+        // salePrice: '',
+        // images: [],
+        // includesTaxes: false,
+        // isTaxable: false,
+        //price: '',
       }}
       validationSchema={Yup.object().shape({
         studentName: Yup.string().max(255),
@@ -173,34 +161,7 @@ function IssueCertificateForm({ customers, qualifications, className, ...rest })
         setStatus,
         setSubmitting
       }) => {
-        console.log(JSON.stringify(values))
-        var l4modules = [];
-        values.l4modules.filter(module => {
-          console.log("module :" + JSON.stringify(module))
-          console.log("grade :" + JSON.stringify(module.grade))
-          console.log("grade :" + JSON.stringify(module.grade))
-          Object.keys(module.grade).map((key, i) => {
-            (
-              // console.log("kkkkkkk :"+key +" : "+module.grade[key])
-              l4modules.push({ name: key, grade: module.grade[key] })
-
-            )
-          });
-        })
-        console.log(JSON.stringify(l4modules));
-        const certificateObjet = {
-          certificateId: values.certificateId,
-          studentName: studentName,
-          studentId: studentId,
-          studentEmail: studentEmail,
-          issuedDate: values.issuedDate,
-          expireDate: values.expireDate,
-          isDelete: values.isDelete,
-          l4modules: values.l4modules,
-          l5modules: values.l5modules,
-          l7modules: values.l7modules,
-        }
-        console.log(JSON.stringify(certificateObjet));
+        alert(studentId);
         // try {
         //   // Do api call
         //   fetch('http://ec2-3-91-144-53.compute-1.amazonaws.com:3000/api/post', {  // Enter your IP address here
@@ -331,6 +292,7 @@ function IssueCertificateForm({ customers, qualifications, className, ...rest })
 
                   {/* Qualification selection */}
                   <div style={{ position: 'relative' }}>
+
                     <div style={{ position: 'relative' }}>
                       <Typography
                         variant='caption'
@@ -355,9 +317,8 @@ function IssueCertificateForm({ customers, qualifications, className, ...rest })
                         </SvgIcon>
                       </IconButton>
                     </div>
-
-
                     <div style={{ display: qulificationNameOpen ? 'block' : 'none', background: '#f9f9f9', padding: '15px', borderRadius: '5px' }}>
+
                       <TextField
                         fullWidth
                         placeholder='Search Student'
@@ -379,18 +340,10 @@ function IssueCertificateForm({ customers, qualifications, className, ...rest })
                             setQualification({
                               name: qulification.name,
                               id: qulification._id,
-                              qualificationLevel: qulification.qualificationLevel,
-                              level4: qulification.l4modules,
-                              level5: qulification.l5modules,
-                              level7: qulification.l7modules,
+                              level4: qulification.l4modules
                             });
-
                             setQulificationNameOpen(false);
-                            setModuleNameOpen(true);
-                            console.log(JSON.stringify(qulification) + 'qqqqqqq');
-                            console.log(qulification.l4modules);
-                            console.log(qulification.l5modules);
-                            console.log(qulification.l7modules);
+                            console.log(qulification);
                           }
                           }>
                             {qulification.name}
@@ -403,60 +356,52 @@ function IssueCertificateForm({ customers, qualifications, className, ...rest })
                   </div>
                   {/* Qualification selection */}
 
-                  <div style={{ display: qualification.level4.length == 0 && 'none', marginBottom: '20px' }}>
-                    <Typography variant='h5'>Level 4 modules</Typography>
-                    {(qualification.level4).map((module, index) => (
-                      <div key={index} className={classes.moduleRow} style={{ display: module.name == '' && 'none' }}>
-                        <Typography variant='body2'>{module.name}</Typography>
-                        <Field
-                          name={`l4modules.${index}.grade.${module.name}`}
-                          placeholder={`Enter grade for module ${index + 1}`}
-                          type="text"
-                          className={classes.textBoxGrade}
 
-                        />
 
-                      </div>
+
+                  {/* <TextField
+                    fullWidth
+                    label="Course"
+                    name="category"
+                    onChange={handleChange}
+                    select
+                    SelectProps={{ native: true }}
+                    value={values.category}
+                    variant="outlined"
+                    onClick={() => { getSelectedQualification(values.category) }}
+                  >
+                    <option>Select a qualification</option>
+                    {qualifications.map((qualification) => (
+                      <option
+                        key={qualification._id}
+                        value={qualification._id}
+                      >
+                        {qualification.name}
+                      </option>
                     ))}
-                  </div>
-
-                  <div style={{ display: qualification.level5.length == 0 && 'none' }}>
-                    <Typography variant='h5'>Level 5 modules</Typography>
-                    {(qualification.level5).map((module, index) => (
-                      <div key={index} className={classes.moduleRow} style={{ display: module.name == '' && 'none' }}>
-                        <Typography variant='body2'>{module.name}</Typography>
-                        <Field
-                          name={`l5modules.${index}.grade.${module.name}`}
-                          placeholder={`Enter grade for module ${index + 1}`}
-                          type="text"
-                          className={classes.textBoxGrade}
-
-                        />
-
-                      </div>
-                    ))}
-                  </div>
+                  </TextField>
 
 
-                  <div style={{ display: qualification.level7.length == 0 && 'none' }}>
-                    <Typography variant='h5'>Level 7 modules</Typography>
-                    {(qualification.level7).map((module, index) => (
-                      <div key={index} className={classes.moduleRow} style={{ display: module.name == '' && 'none' }}>
-                        <Typography variant='body2'>{module.name}</Typography>
-                        <Field
-                          name={`l7modules.${index}.grade.${module.name}`}
-                          placeholder={`Enter grade for module ${index + 1}`}
-                          type="text"
-                          className={classes.textBoxGrade}
+                  <Button onClick={() => { console.log(qualificationId) }}>{qualification.name}</Button> */}
+                  {(qualification.level4).map((module, index) => (
+                    <div key={index} className={classes.moduleRow}>
+                      <Typography>{module.name}</Typography>
+                      <TextField
+                        // error={Boolean(touched.moduleGrade && errors.moduleGrade)}
+                        // helperText={touched.moduleGrade && errors.moduleGrade}
+                        placeholder="Enter grade"
+                        name={module.name}
+                        onBlur={handleBlur}
+                        onChange={(e) => { setLevel4Grades(e.target.value) }}
+                        value={level4Grades[index]}
+                        variant="outlined"
 
-                        />
-
-                      </div>
-                    ))}
-                  </div>
+                      />
+                    </div>
+                  ))}
                 </CardContent>
               </Card>
-              {/* <Box mt={3}>
+              <Box mt={3}>
                 <Card>
                   <CardHeader title="Upload Certificate" />
                   <Divider />
@@ -464,7 +409,7 @@ function IssueCertificateForm({ customers, qualifications, className, ...rest })
                     <FilesDropzone />
                   </CardContent>
                 </Card>
-              </Box> */}
+              </Box>
 
             </Grid>
             <Grid
@@ -473,7 +418,7 @@ function IssueCertificateForm({ customers, qualifications, className, ...rest })
               lg={4}
             >
               <Card>
-                <CardHeader title="Student Details" />
+                <CardHeader title="Other Details" />
                 <Divider />
                 <CardContent>
                   <Box mt={1}>
@@ -489,7 +434,6 @@ function IssueCertificateForm({ customers, qualifications, className, ...rest })
                       value={studentId}
                       variant="outlined"
                       disabled
-
                     />
                   </Box>
                   <Box mt={2} mb={2}>
@@ -506,31 +450,6 @@ function IssueCertificateForm({ customers, qualifications, className, ...rest })
                       disabled
                     />
                   </Box>
-
-
-                </CardContent>
-              </Card>
-              <Box mt={5} />
-              <Card>
-                <CardHeader title="Certificate Details" />
-                <Divider />
-                <CardContent>
-                  <Box mt={1}>
-                    <TextField
-                      error={Boolean(touched.certificateId && errors.certificateId)}
-                      fullWidth
-                      helperText={touched.certificateId && errors.certificateId}
-                      //label="Student ID"
-                      placeholder="Certificate Id"
-                      name="certificateId"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.certificateId}
-                      variant="outlined"
-
-                    />
-                  </Box>
-
 
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <KeyboardDatePicker
@@ -594,4 +513,3 @@ IssueCertificateForm.propTypes = {
 };
 
 export default IssueCertificateForm;
-
